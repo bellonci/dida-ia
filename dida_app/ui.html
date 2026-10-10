@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dida · Seu espaço para conversar</title>
+<style>
+:root{color-scheme:dark;--bg:#10131c;--panel:#191d29;--sidebar:#141823;--surface:#202534;--text:#edf0fa;--muted:#9ca6bf;--border:#2b3245;--accent:#b8a4ff;--accent-text:#1e1639;--soft:#242137;--user:#2e2947;--bot:#191d29;--code:#232b3c;--shadow:0 24px 80px #0005}
+:root[data-theme=light]{color-scheme:light;--bg:#f6f7fb;--panel:#fff;--sidebar:#eeeff6;--surface:#e7eaf4;--text:#25283b;--muted:#626a83;--border:#d9deec;--accent:#7052c9;--accent-text:#fff;--soft:#ece6fb;--user:#e8e0fa;--bot:#fff;--code:#edf0f7;--shadow:0 24px 80px #27345c20}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.65 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}button,input,textarea,select{font:inherit}button{cursor:pointer;color:inherit}button:disabled{cursor:default;opacity:.45}button,label[role=button]{transition:background .15s,transform .15s}button:hover:not(:disabled){filter:brightness(1.12)}button:active:not(:disabled){transform:translateY(1px)}:focus-visible{outline:3px solid var(--accent);outline-offset:4px}[hidden]{display:none!important}svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.wrap{display:grid;grid-template-columns:256px minmax(0,1fr);height:100dvh;min-height:500px}.sidebar{background:var(--sidebar);border-right:1px solid var(--border);padding:30px 22px;display:flex;flex-direction:column;gap:28px;overflow:auto}.brand{display:flex;align-items:center;gap:12px}.brand-mark{display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:var(--soft);color:var(--accent)}.brand strong{display:block;letter-spacing:3px;font-size:18px}.brand small{color:var(--muted);font-size:11px}.sidebar-caption{margin:0 0 10px;color:var(--muted);font-size:10px;letter-spacing:2px;text-transform:uppercase}.sidebar-nav{display:grid;gap:5px}.sidebar-nav button{display:flex;align-items:center;gap:12px;text-align:left;border:0;border-radius:12px;padding:12px;background:transparent}.sidebar-nav button:hover{background:var(--surface)}.sidebar-nav .active{background:var(--soft);color:var(--accent)}.ball-wrap{display:flex;flex-direction:column;align-items:center;margin:auto 0 0;gap:8px}#ball{display:block;width:174px;height:174px;filter:saturate(.7)}.assistant-caption{margin:0;color:var(--muted);font-size:12px}.micro-control{width:100%;padding:14px 4px;border-top:1px solid var(--border)}.micro-control label{display:flex;justify-content:space-between;color:var(--muted);font-size:11px}.micro-control input{width:100%;accent-color:var(--accent);min-height:28px}#mem{font-size:11px;color:var(--muted);text-align:center}
+.conversation{min-width:0;display:flex;flex-direction:column;overflow:hidden}.topbar{flex:none;min-height:86px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 38px;border-bottom:1px solid var(--border)}.topbar h1{font-size:16px;margin:0;font-weight:600}.connection{display:flex;gap:7px;align-items:center;color:var(--muted);font-size:11px}.connection-dot{height:6px;width:6px;background:#71d3b0;border-radius:50%}.top-actions{display:flex;gap:8px}.icon-button{display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--border);background:var(--panel);border-radius:11px;min-height:40px;padding:8px 12px;font-size:12px}#themeToggle{width:42px;padding:8px}#route{color:var(--muted);font-size:11px}#status{color:var(--muted);font-size:12px;min-height:20px}.conversation-body{flex:1;overflow:auto;padding:32px max(24px,calc((100% - 800px)/2));scroll-behavior:smooth}.welcome{padding:30px 0 26px}.eyebrow{font-size:10px;font-weight:600;letter-spacing:2px;color:var(--accent);margin:0 0 12px}.welcome h2{font-size:clamp(26px,3vw,38px);line-height:1.25;font-weight:500;letter-spacing:-1px;margin:0 0 14px;max-width:560px}.welcome p{color:var(--muted);max-width:520px;margin:0}.suggestions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:28px 0}.suggestion{display:flex;flex-direction:column;text-align:left;gap:14px;background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:18px;min-height:136px}.suggestion svg{color:var(--accent)}.suggestion strong{font-size:13px;font-weight:500}.suggestion span{color:var(--muted);font-size:11px;line-height:1.5}#chat{display:flex;flex-direction:column;gap:22px;padding:10px 0 24px}.bubble{max-width:88%;padding:17px 20px;border-radius:18px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.7}.bubble::before{display:block;font-size:9px;font-weight:650;letter-spacing:1.5px;margin-bottom:8px;color:var(--muted)}.bubble.bot::before{content:"DIDA";color:var(--accent)}.bubble.user::before{content:"VOCÊ"}.bot{align-self:flex-start;background:var(--bot);border:1px solid var(--border);border-top-left-radius:5px}.user{align-self:flex-end;background:var(--user);border-top-right-radius:5px}.sys{align-self:center;color:var(--muted);padding:8px 14px;font-size:12px;text-align:center}.bubble img{max-width:100%;border-radius:12px;margin-top:10px;display:block}.bubble code{background:var(--code);padding:2px 5px;border-radius:5px}.bubble a{color:var(--accent)}.bot:empty::after{content:"Pensando…";color:var(--muted);font-size:13px}.composer{flex:none;width:100%;padding:12px max(24px,calc((100% - 800px)/2)) 20px;background:var(--bg)}.composer-row{display:flex;align-items:flex-end;gap:10px;padding:10px;border:1px solid var(--border);border-radius:19px;background:var(--panel);box-shadow:0 8px 28px #00000008}.composer-row:focus-within{border-color:var(--accent)}.composer textarea{min-width:0;flex:1;resize:none;min-height:42px;max-height:150px;background:transparent;color:var(--text);border:0;padding:10px 4px;outline:none;line-height:1.5}.composer textarea::placeholder{color:var(--muted)}#send{display:flex;align-items:center;gap:8px;min-height:42px;border:0;border-radius:12px;padding:10px 16px;background:var(--accent);color:var(--accent-text);font-weight:600;font-size:13px}#attach{display:grid;place-items:center;width:42px;height:42px;color:var(--muted);border-radius:11px;cursor:pointer}#attach:hover{background:var(--surface)}.composer-hint{color:var(--muted);font-size:10px;text-align:center;margin:9px 0 0}#chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}#chips:empty{display:none}.chip{display:flex;align-items:center;gap:8px;background:var(--soft);border:1px solid var(--border);border-radius:12px;padding:6px 10px;font-size:12px;max-width:100%}.chip img{width:28px;height:28px;object-fit:cover;border-radius:6px}.chip .name{max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.chip button{background:transparent;border:0;color:var(--muted)}
+.profile-dialog{width:min(560px,calc(100vw - 32px));max-height:88dvh;overflow:auto;border:1px solid var(--border);border-radius:24px;padding:28px;background:var(--panel);color:var(--text);box-shadow:var(--shadow)}.profile-dialog::backdrop{background:#080c1880;backdrop-filter:blur(7px)}.profile-dialog h2{font-size:23px;letter-spacing:-.5px;margin:0 0 10px;font-weight:550}.profile-dialog p{color:var(--muted);font-size:13px}.profile-dialog label{display:block;font-size:12px;margin:17px 0 7px}.profile-dialog input,.profile-dialog textarea,.profile-dialog select{width:100%;border:1px solid var(--border);background:var(--bg);color:var(--text);border-radius:11px;padding:11px 12px}.profile-dialog textarea{min-height:120px;resize:vertical}.profile-dialog input[type=checkbox],.profile-dialog input[type=radio]{width:18px;height:18px;accent-color:var(--accent)}.profile-dialog input[type=range]{accent-color:var(--accent);padding:0;min-height:32px}.profile-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:22px;flex-wrap:wrap}.profile-actions button{border:1px solid var(--border);border-radius:11px;min-height:42px;background:var(--surface);padding:10px 15px;font-size:12px}.profile-actions #profileSave,.profile-actions #voiceSave,.profile-actions #filesAnalyze{background:var(--accent);color:var(--accent-text);border-color:transparent}.file-option{display:flex!important;gap:10px;align-items:center;min-height:42px}.file-result{display:flex;gap:12px;border:1px solid var(--border);border-radius:13px;padding:12px;margin-bottom:10px}.file-result span{min-width:0}.file-result small{display:block;overflow-wrap:anywhere;color:var(--muted)}#filesDialog{width:min(760px,calc(100vw - 32px))}#filesResults{max-height:32dvh;overflow:auto}#voiceChoices{border:1px solid var(--border);border-radius:13px;padding:12px}#voiceChoices label{display:flex;gap:10px;align-items:center;min-height:44px;margin:0}#memoryList{display:grid;gap:12px;margin-top:16px}#memoryList article{border:1px solid var(--border);border-radius:12px;padding:14px}#memoryList p{white-space:pre-wrap;overflow-wrap:anywhere;margin:8px 0}#memoryList time{color:var(--muted);font-size:10px}.danger{color:#ec8f9d!important}.confirm-box{margin-top:16px;padding:14px;border:1px solid #ac576a;border-radius:12px}.feedback{min-height:22px;font-size:12px;color:var(--muted)}
+@media(max-width:1000px){.wrap{grid-template-columns:210px minmax(0,1fr)}.sidebar{padding:24px 14px}.topbar{padding:18px 24px}.suggestions{gap:8px}.suggestion{padding:14px}}@media(max-width:720px){.wrap{display:flex;flex-direction:column;min-height:0}.sidebar{flex:none;padding:12px 18px;flex-direction:row;justify-content:space-between;align-items:center;border-right:0;border-bottom:1px solid var(--border);overflow:visible;gap:8px}.brand{gap:8px}.brand-mark{width:32px;height:32px;border-radius:10px}.brand strong{font-size:14px}.brand small,.sidebar-caption,.ball-wrap{display:none}.sidebar-nav{display:flex;gap:0}.sidebar-nav button{padding:10px}.sidebar-nav button span{display:none}.conversation{flex:1;min-height:0}.topbar{padding:12px 18px;min-height:70px}.conversation-body{padding:14px 18px}.welcome{padding:16px 0 0}.welcome h2{font-size:29px}.suggestions{margin:20px 0;grid-template-columns:1fr}.suggestion{min-height:0;padding:13px;display:grid;grid-template-columns:22px 1fr;gap:8px 12px}.suggestion span{grid-column:2}.composer{padding:8px 14px max(12px,env(safe-area-inset-bottom))}.composer-hint{font-size:9px}.bubble{max-width:95%;padding:14px 16px}#send span{display:none}#send{padding:10px 12px}.profile-dialog{padding:22px}.top-actions{gap:6px}#stopButton span{display:none}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <aside class="sidebar" aria-label="Ferramentas da Dida">
+    <div class="brand"><div class="brand-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.6 6.4L21 12l-6.4 2.6L12 21l-2.6-6.4L3 12l6.4-2.6Z"/></svg></div><div><strong>DIDA</strong><small>Ideias começam com uma conversa.</small></div></div>
+    <div><p class="sidebar-caption">Seu espaço</p><nav class="sidebar-nav" aria-label="Preferências e ferramentas">
+      <button id="filesOpen" type="button" aria-controls="filesDialog" aria-haspopup="dialog" title="Arquivos"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg><span>Meus arquivos</span></button>
+      <button id="voiceOpen" type="button" aria-controls="voiceDialog" aria-haspopup="dialog" title="Voz e fala"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6M8 5v14M12 8v8M16 3v18M20 9v6"/></svg><span>Voz e fala</span></button>
+      <button id="profileOpen" type="button" aria-controls="profileDialog" aria-haspopup="dialog" title="Sobre mim"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></svg><span>Sobre mim</span></button>
+      <button id="memoryOpen" type="button" aria-controls="memoryDialog" aria-haspopup="dialog" title="Histórico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Histórico e memória</span></button>
+    </nav></div>
+    <div class="ball-wrap"><canvas id="ball" width="720" height="720" aria-hidden="true"></canvas><p class="assistant-caption">Um pouco de curiosidade, todo dia.</p>
+<div id="mem"></div>
+    </div>
+  </aside>
+  <main class="conversation">
+    <header class="topbar"><div><h1>Uma conversa com a Dida</h1><div class="connection"><span class="connection-dot" aria-hidden="true"></span><span id="connectionText">Conectando…</span></div></div><div class="top-actions"><button id="stopButton" class="icon-button" type="button" disabled aria-label="Interromper resposta"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2"/></svg><span>Parar resposta</span></button><button id="themeToggle" class="icon-button" type="button" title="Alternar tema" aria-label="Alternar tema claro e escuro"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1 1M18 18l1 1M5 19l1-1M18 6l1-1"/></svg></button></div></header>
+    <div class="conversation-body" id="conversationBody"><section class="welcome" id="welcome"><p class="eyebrow" id="welcomeGreeting">BOM TER VOCÊ POR AQUI</p><h2>O que vamos<br>descobrir hoje?</h2><p>Um lugar para organizar pensamentos, encontrar respostas e dar espaço às suas ideias.</p><div class="suggestions">
+      <button class="suggestion" type="button" data-prompt="Quero organizar uma ideia. Pode me ajudar a começar?"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.6 6.4L21 12l-6.4 2.6L12 21l-2.6-6.4L3 12l6.4-2.6Z"/></svg><strong>Organizar uma ideia</strong><span>Transforme pensamentos em próximos passos.</span></button>
+      <button class="suggestion" type="button" data-prompt="Quero aprender sobre um assunto. Me ajude a escolher por onde começar."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6a3 3 0 0 1 3 3v14a4 4 0 0 0-4-3H4ZM13 7a3 3 0 0 1 3-3h5v14h-4a4 4 0 0 0-4 3"/></svg><strong>Entender um assunto</strong><span>Explore com perguntas e explicações simples.</span></button>
+      <button class="suggestion" type="button" data-attach="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg><strong>Olhar um documento</strong><span>Anexe um arquivo e encontre o que importa.</span></button>
+    </div></section><div id="chat" role="log" aria-label="Mensagens da conversa" aria-live="polite"></div></div>
+    <div class="composer"><div id="status" role="status" aria-live="polite"></div><div id="chips"></div><div class="composer-row"><label for="file" id="attach" role="button" tabindex="0" title="Anexar arquivo" aria-label="Anexar arquivo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 12 6-6a3 3 0 0 1 4 4l-8 8a5 5 0 0 1-7-7l8-8"/></svg></label><input id="file" type="file" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none" accept=".txt,.md,.pdf,.png,.jpg,.jpeg,.webp,.gif,.bmp,.docx,.xlsx,.xls,.csv,.json,.py,.js,.ts,.html,.css,.sh,.java,.c,.cpp,.rs,.go,.yaml,.yml,.ini,.log"><textarea id="input" rows="1" aria-label="Sua mensagem" placeholder="Escreva o que está pensando…"></textarea><button id="send" type="button" aria-label="Enviar mensagem"><span>Enviar</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button></div><p class="composer-hint">Enter para enviar · Shift + Enter para uma nova linha <span id="route" hidden></span></p></div>
+  </main>
+</div>
+
+<dialog id="memoryDialog" class="profile-dialog" aria-labelledby="memoryTitle"><h2 id="memoryTitle">Histórico e memória</h2><p>Você decide o que fica guardado. Desativar a memória impede novas gravações e o uso de conversas anteriores nas respostas. O histórico existente continua disponível para consulta ou exclusão.</p><label class="file-option"><input id="memoryEnabled" type="checkbox"> Usar e salvar memória das conversas</label><p id="memoryFeedback" class="feedback" role="status" aria-live="polite"></p><div id="memoryList"></div><div id="memoryConfirm" class="confirm-box" hidden><p>Apagar todas as conversas salvas neste computador? Esta ação não pode ser desfeita.</p><div class="profile-actions"><button id="memoryKeep" type="button">Manter histórico</button><button id="memoryDelete" type="button" class="danger">Sim, apagar</button></div></div><div class="profile-actions"><button id="memoryClear" type="button" class="danger">Apagar histórico</button><button id="memoryClose" type="button">Fechar</button></div></dialog>
+
+<dialog id="profileDialog" class="profile-dialog" aria-labelledby="profileTitle">
+  <h2 id="profileTitle">Vamos nos conhecer?</h2>
+  <p>Cole o que a Dida deve saber sobre voce. O perfil fica neste computador e é enviado ao modelo local nas respostas. Um tema de interesse pode ser consultado na Tavily para a curiosidade do dia.</p>
+  <label for="profileName">Seu nome</label>
+  <input id="profileName" maxlength="80" autocomplete="name">
+  <label for="profileInterests">Interesses e hobbies</label>
+  <input id="profileInterests" maxlength="500" placeholder="Ex.: musica, astronomia, futebol">
+  <label for="profileAbout">Mais sobre voce</label>
+  <textarea id="profileAbout" maxlength="4000" placeholder="Cole aqui suas preferencias e informacoes que queira compartilhar com a Dida."></textarea>
+  <div class="profile-actions">
+    <button id="profileLater" type="button">Agora nao</button>
+    <button id="profileSave" type="button">Salvar</button>
+  </div>
+</dialog>
+
+<dialog id="voiceDialog" class="profile-dialog" aria-labelledby="voiceTitle">
+  <form id="voiceForm" action="/api/voice" method="post">
+    <h2 id="voiceTitle">Voz e fala</h2>
+    <p>Escolha como a Dida fala. Suas preferências ficam salvas neste computador.</p>
+    <fieldset id="voiceChoices"><legend>Voz</legend></fieldset>
+      <div class="micro-control"><label for="sens">Sensibilidade do microfone <span id="sensVal"></span></label><input id="sens" type="range" min="0" max="1" step="0.05"></div>
+    <p id="voiceHelp">Google e Microsoft precisam de internet. A voz local depende das vozes instaladas no sistema.</p>
+    <label for="voiceSpeed">Velocidade: <output id="voiceSpeedValue" for="voiceSpeed">130%</output></label>
+    <input id="voiceSpeed" name="speed" type="range" min="70" max="180" step="5" value="130">
+    <label for="voiceVolume">Volume: <output id="voiceVolumeValue" for="voiceVolume">100%</output></label>
+    <input id="voiceVolume" name="volume" type="range" min="0" max="100" step="5" value="100">
+    <label for="voicePause">Pausa entre frases: <output id="voicePauseValue" for="voicePause">0 s</output></label>
+    <input id="voicePause" name="pause" type="range" min="0" max="0.8" step="0.05" value="0">
+    <p id="voiceFeedback" role="status" aria-live="polite"></p>
+    <div class="profile-actions">
+      <button id="voiceClose" type="button">Fechar</button>
+      <button id="voicePreview" type="button">Ouvir amostra</button>
+      <button id="voiceSave" type="submit">Salvar</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="filesDialog" class="profile-dialog" aria-labelledby="filesTitle">
+  <h2 id="filesTitle">Arquivos do computador</h2>
+  <p>Busque pelo nome e pelo texto de documentos no computador e em pendrives montados. A pesquisa acontece aqui, sem enviar os arquivos para a internet.</p>
+  <label class="file-option"><input type="checkbox" id="filesPermission"> Autorizar pesquisa e leitura local neste computador</label>
+  <p id="filesScope">Acesso somente com as permissões do seu usuário. Arquivos de sistema, caches e pastas técnicas são ignorados. Revogar interrompe a busca; não apaga relatórios já criados.</p>
+  <form id="filesForm" action="/api/files/search" method="post">
+    <label for="filesQuery">Nome ou palavras dentro do documento</label>
+    <input id="filesQuery" name="query" required minlength="2" maxlength="160" placeholder="Ex.: relatório de vendas" type="search">
+    <label class="file-option"><input id="filesContent" name="content" type="checkbox" checked> Procurar também no conteúdo</label>
+    <label class="file-option"><input id="filesHidden" name="hidden" type="checkbox"> Incluir pastas ocultas de documentos</label>
+    <div class="profile-actions"><button id="filesSearch" type="submit">Pesquisar</button><button id="filesCancel" type="button">Parar busca</button></div>
+  </form>
+  <p id="filesFeedback" role="status" aria-live="polite"></p>
+  <div id="filesResults"></div>
+  <label for="filesInstructions">O que colocar no relatório?</label>
+  <textarea id="filesInstructions" maxlength="2000" placeholder="Resumo por arquivo, pontos importantes e conclusão."></textarea>
+  <p>Para análise, serão enviados apenas trechos dos arquivos selecionados ao modelo local. Até 10 arquivos, 20 MB no total e 60 mil caracteres de contexto. PDFs escaneados não têm pesquisa de texto sem OCR.</p>
+  <label class="file-option"><input id="filesOnline" type="checkbox"> Confirmo o uso dos trechos selecionados para gerar o relatório</label>
+  <div class="profile-actions"><button id="filesClose" type="button">Fechar</button><button id="filesAnalyze" type="button">Gerar relatório</button></div>
+</dialog>
+
+<script>
+var chat = document.getElementById('chat');
+var input = document.getElementById('input');
+var send = document.getElementById('send');
+var attachBtn = document.getElementById('attach');
+var fileInput = document.getElementById('file');
+var chipsDiv = document.getElementById('chips');
+var statusEl = document.getElementById('status');
+var sens = document.getElementById('sens');
+var sensVal = document.getElementById('sensVal');
+var routeEl = document.getElementById('route');
+var memEl = document.getElementById('mem');
+var profileDialog = document.getElementById('profileDialog');
+var profileOpen = document.getElementById('profileOpen');
+var profileName = document.getElementById('profileName');
+var profileInterests = document.getElementById('profileInterests');
+var profileAbout = document.getElementById('profileAbout');
+var profileSave = document.getElementById('profileSave');
+var profileLater = document.getElementById('profileLater');
+
+var attached = null;
+var levels = { user: 0, bot: 0 };
+var speaking = { user: false, bot: false };
+var liveBot = null;
+var conversationBody = document.getElementById('conversationBody');
+var welcome = document.getElementById('welcome');
+var stopButton = document.getElementById('stopButton');
+var memoryCsrf = '';
+var followConversation = true;
+conversationBody.addEventListener('scroll', function(){ followConversation = conversationBody.scrollHeight - conversationBody.scrollTop - conversationBody.clientHeight < 100; });
+function scrollConversation() { if(followConversation) conversationBody.scrollTop = conversationBody.scrollHeight; }
+function setRoute(route) { routeEl.textContent = ''; stopButton.disabled = false; }
+function updateMemoryLabel(data) { memEl.textContent = data.enabled ? data.count + ' conversas na memória' : 'Memória desativada'; }
+
+
+function addBubble(t, who, imgUrl) {
+  var d = document.createElement('div');
+  d.className = 'bubble ' + who;
+  if (who === 'user') welcome.hidden = true;
+  d.textContent = t;
+  if (imgUrl) {
+    var im = document.createElement('img');
+    im.src = imgUrl;
+    d.appendChild(im);
+  }
+  chat.appendChild(d);
+  scrollConversation();
+}
+function startBot() {
+  liveBot = document.createElement('div');
+  liveBot.className = 'bubble bot';
+  liveBot.textContent = '';
+  chat.appendChild(liveBot);
+  scrollConversation();
+}
+function appendBot(t) {
+  if (!liveBot) startBot();
+  liveBot.textContent += t;
+  scrollConversation();
+}
+function setStatus(t) { statusEl.textContent = t || ''; }
+
+var filesDialog=document.getElementById('filesDialog');
+var filesPermission=document.getElementById('filesPermission');
+var filesFeedback=document.getElementById('filesFeedback');
+var filesResults=document.getElementById('filesResults');
+var filesSearch=document.getElementById('filesSearch');
+var filesAnalyze=document.getElementById('filesAnalyze');
+var filesJob=''; var filesTimer=null; var filesCsrf=''; var filesShown=0;
+function filesRequest(path,body){
+  return fetch(path,{method:'POST',headers:{'Content-Type':'application/json','X-Dida-CSRF':filesCsrf},body:JSON.stringify(body)})
+    .then(function(r){return r.json().then(function(data){if(!r.ok)throw new Error(data.error || 'Falha na pesquisa');return data;});});
+}
+function addFileResults(rows){
+  rows.slice(filesShown).forEach(function(row){
+    var label=document.createElement('label');label.className='file-result';
+    var check=document.createElement('input');check.type='checkbox';check.value=row.id;check.name='fileChoice';
+    var description=document.createElement('span');
+    var name=document.createElement('strong');name.textContent=row.name;
+    var path=document.createElement('small');path.textContent=row.path;
+    var snippet=document.createElement('small');snippet.textContent='Encontrado no '+row.match+' — '+(row.snippet || 'Sem trecho de texto disponível.');
+    description.appendChild(name);description.appendChild(path);description.appendChild(snippet);
+    label.appendChild(check);label.appendChild(description);filesResults.appendChild(label);
+  });filesShown=rows.length;
+}
+function pollFiles(){
+  if(!filesJob)return;
+  fetch('/api/files/job?id='+encodeURIComponent(filesJob)).then(function(r){if(!r.ok)throw new Error('Pesquisa não disponível');return r.json();})
+  .then(function(data){
+    addFileResults(data.results);
+    var text=data.results.length+' resultado(s); '+data.checked+' documentos examinados.';
+    if(data.status==='searching'){text+=' Buscando...';filesTimer=setTimeout(pollFiles,1500);}
+    else{filesSearch.disabled=false;if(data.partial)text+=' Busca parcial: limite de tempo ou 200 resultados. Use termos mais específicos.';if(data.status==='cancelled')text+=' Busca interrompida.';if(data.status==='error')text+=' Ocorreu uma falha na busca.';}
+    if(data.errors)text+=' Alguns arquivos não puderam ser lidos.';
+    filesFeedback.textContent=text;
+  }).catch(function(error){filesFeedback.textContent=error.message;filesSearch.disabled=false;});
+}
+function openFiles(){
+  if(!filesDialog.open)filesDialog.showModal();
+  fetch('/api/files/status').then(function(r){if(!r.ok)throw new Error();return r.json();})
+  .then(function(data){filesPermission.checked=data.enabled;filesCsrf=data.csrf;filesFeedback.textContent=data.enabled?'Pesquisa local autorizada.':'Autorize o acesso para começar.';})
+  .catch(function(){filesFeedback.textContent='Não consegui carregar as permissões.';});
+}
+document.getElementById('filesOpen').onclick=openFiles;
+filesPermission.onchange=function(){
+  filesRequest('/api/files/permission',{enabled:filesPermission.checked}).then(function(data){
+    filesPermission.checked=data.enabled;filesFeedback.textContent=data.enabled?'Pesquisa local autorizada.':'Permissão revogada. Nenhum novo arquivo será lido.';
+    if(!data.enabled){if(filesTimer)clearTimeout(filesTimer);filesJob='';filesResults.replaceChildren();filesShown=0;filesSearch.disabled=false;}
+  }).catch(function(error){filesPermission.checked=!filesPermission.checked;filesFeedback.textContent=error.message;});
+};
+document.getElementById('filesForm').addEventListener('submit',function(event){
+  event.preventDefault();if(!filesPermission.checked){filesFeedback.textContent='Autorize a pesquisa local primeiro.';return;}
+  if(filesTimer)clearTimeout(filesTimer);filesResults.replaceChildren();filesShown=0;filesSearch.disabled=true;
+  filesRequest('/api/files/search',{query:document.getElementById('filesQuery').value,content:document.getElementById('filesContent').checked,hidden:document.getElementById('filesHidden').checked})
+  .then(function(data){filesJob=data.id;pollFiles();}).catch(function(error){filesFeedback.textContent=error.message;filesSearch.disabled=false;});
+});
+document.getElementById('filesCancel').onclick=function(){
+  if(filesJob)filesRequest('/api/files/cancel',{job:filesJob}).catch(function(error){filesFeedback.textContent=error.message;});
+};
+document.getElementById('filesClose').onclick=function(){filesDialog.close();};
+filesDialog.addEventListener('close',function(){if(filesJob)filesRequest('/api/files/cancel',{job:filesJob}).catch(function(){});if(filesTimer)clearTimeout(filesTimer);filesSearch.disabled=false;});
+filesAnalyze.onclick=function(){
+  var ids=Array.from(filesResults.querySelectorAll('input[name=fileChoice]:checked')).map(function(input){return input.value;});
+  if(!ids.length || ids.length>10){filesFeedback.textContent='Selecione de um a dez arquivos.';return;}
+  if(!document.getElementById('filesOnline').checked){filesFeedback.textContent='Confirme o envio dos trechos selecionados para análise.';return;}
+  filesAnalyze.disabled=true;
+  filesRequest('/api/files/analyze',{job:filesJob,ids:ids,confirm_online:true,prompt:document.getElementById('filesInstructions').value})
+    .then(function(data){filesFeedback.textContent=data.count+' arquivo(s) enviado(s) para gerar o relatório.';setStatus('Preparando o relatório...');})
+    .catch(function(error){filesFeedback.textContent=error.message;})
+    .finally(function(){filesAnalyze.disabled=false;});
+};
+function showReport(data){
+  var bubble=document.createElement('div');bubble.className='bubble sys';
+  var link=document.createElement('a');link.textContent='Baixar relatório: '+data.name;
+  link.href='/api/report?id='+encodeURIComponent(data.id);link.download=data.name;
+  var path=document.createElement('div');path.textContent='Salvo em: '+data.path;
+  bubble.appendChild(link);bubble.appendChild(path);chat.appendChild(bubble);scrollConversation();
+}
+
+var voiceCsrf = '';
+var voiceDialog = document.getElementById('voiceDialog');
+var voiceForm = document.getElementById('voiceForm');
+var voiceOpen = document.getElementById('voiceOpen');
+var voiceFeedback = document.getElementById('voiceFeedback');
+var voicePreview = document.getElementById('voicePreview');
+var voiceSave = document.getElementById('voiceSave');
+var voiceChoices = document.getElementById('voiceChoices');
+var voiceSpeed = document.getElementById('voiceSpeed');
+var voiceVolume = document.getElementById('voiceVolume');
+var voicePause = document.getElementById('voicePause');
+function updateVoiceLabels() {
+  document.getElementById('voiceSpeedValue').textContent = voiceSpeed.value + '%';
+  document.getElementById('voiceVolumeValue').textContent = voiceVolume.value + '%';
+  document.getElementById('voicePauseValue').textContent = Number(voicePause.value).toLocaleString('pt-BR') + ' s';
+}
+[voiceSpeed, voiceVolume, voicePause].forEach(function(control){ control.addEventListener('input', updateVoiceLabels); });
+voiceOpen.onclick = function(){
+  voiceFeedback.textContent = 'Carregando configurações...';
+  voicePreview.disabled = true; voiceSave.disabled = true;
+  if (!voiceDialog.open) voiceDialog.showModal();
+  fetch('/api/voice').then(function(r){ if(!r.ok) throw new Error(); return r.json(); }).then(function(data){
+    voiceCsrf = data.csrf;
+    voiceChoices.querySelectorAll('label').forEach(function(label){ label.remove(); });
+    data.options.forEach(function(option){
+      var label = document.createElement('label');
+      var radio = document.createElement('input');
+      radio.type = 'radio'; radio.name = 'voice'; radio.value = option.id;
+      radio.required = true; radio.disabled = !option.available;
+      radio.checked = option.id === data.settings.voice;
+      label.appendChild(radio);
+      label.appendChild(document.createTextNode(option.label + (option.available ? '' : ' — indisponível')));
+      voiceChoices.appendChild(label);
+    });
+    voiceSpeed.value = Math.round(data.settings.speed * 100);
+    voiceVolume.value = Math.round(data.settings.volume * 100);
+    voicePause.value = data.settings.pause;
+    updateVoiceLabels();
+    voiceFeedback.textContent = 'A amostra não altera suas preferências. Use Salvar para manter a escolha.';
+    voicePreview.disabled = false; voiceSave.disabled = false;
+  }).catch(function(){ voiceFeedback.textContent = 'Não consegui carregar. Feche e abra as configurações novamente.'; });
+};
+document.getElementById('voiceClose').onclick = function(){ voiceDialog.close(); };
+function sendVoiceSettings(preview) {
+  if (!voiceForm.reportValidity()) return;
+  var selected = voiceChoices.querySelector('input[name=voice]:checked:not(:disabled)');
+  if (!selected) { voiceFeedback.textContent = 'Escolha uma voz disponível.'; return; }
+  voicePreview.disabled = true; voiceSave.disabled = true;
+  voiceFeedback.textContent = preview ? 'Preparando a amostra...' : 'Salvando...';
+  fetch('/api/voice', {method:'POST', headers:{'Content-Type':'application/json', 'X-Dida-CSRF':voiceCsrf},
+    body:JSON.stringify({voice:selected.value,speed:Number(voiceSpeed.value)/100,
+      volume:Number(voiceVolume.value)/100,pause:Number(voicePause.value),preview:preview})
+  }).then(function(r){ return r.json().then(function(data){ if(!r.ok) throw new Error(data.error || 'Falha ao salvar'); return data; }); })
+    .then(function(){ voiceFeedback.textContent = preview ? 'A amostra será reproduzida. Volume zero deixa a voz muda.' : 'Configurações salvas para as próximas falas.'; })
+    .catch(function(e){ voiceFeedback.textContent = e.message || 'Não consegui aplicar a configuração.'; })
+    .finally(function(){ voicePreview.disabled = false; voiceSave.disabled = false; });
+}
+voiceForm.addEventListener('submit', function(event){ event.preventDefault(); sendVoiceSettings(false); });
+voicePreview.onclick = function(){ sendVoiceSettings(true); };
+
+fetch('/api/sens').then(function(r){return r.json();}).then(function(j){ sens.value = j.v; sensVal.textContent = j.v; });
+fetch('/api/mem').then(function(r){return r.json();}).then(function(j){ memoryCsrf = j.csrf; updateMemoryLabel(j); }).catch(function(){ setStatus('Não consegui carregar a memória.'); });
+fetch('/api/profile').then(function(r){return r.json();}).then(function(j){
+  document.getElementById('welcomeGreeting').textContent = 'Olá, ' + j.name + '.';
+  profileName.value = j.name || '';
+  profileInterests.value = j.interests || '';
+  profileAbout.value = j.about || '';
+});
+
+profileOpen.onclick = function(){ if (!profileDialog.open) profileDialog.showModal(); };
+profileLater.onclick = function(){ profileDialog.close(); };
+profileDialog.addEventListener('close', function(){
+  fetch('/api/profile', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ intro_seen: true })
+  }).catch(function(){});
+});
+profileSave.onclick = function(){
+  fetch('/api/profile', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: profileName.value,
+      interests: profileInterests.value,
+      about: profileAbout.value,
+      intro_seen: true
+    })
+  }).then(function(r){
+    if (!r.ok) throw new Error();
+    profileDialog.close();
+    setStatus('Informacoes sobre voce salvas.');
+  }).catch(function(){
+    setStatus('Nao consegui salvar suas informacoes.');
+  });
+};
+
+sens.addEventListener('input', function(){
+  sensVal.textContent = sens.value;
+  fetch('/api/sens', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ v: parseFloat(sens.value) })
+  });
+});
+
+attachBtn.addEventListener('keydown', function(e){
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    fileInput.click();
+  }
+});
+
+fileInput.onchange = function(){
+  var f = fileInput.files[0];
+  if (!f) return;
+  if (f.size > 20 * 1024 * 1024) {
+    alert('Arquivo maior que 20 MB');
+    fileInput.value = '';
+    return;
+  }
+  attached = f;
+  chipsDiv.innerHTML = '';
+  var chip = document.createElement('span');
+  chip.className = 'chip';
+  if (f.type.indexOf('image/') === 0) {
+    var url = URL.createObjectURL(f);
+    var im = document.createElement('img');
+    im.src = url;
+    chip.appendChild(im);
+  } else {
+    var icon = document.createElement('span');
+    icon.textContent = '[doc]';
+    chip.appendChild(icon);
+  }
+  var nameSpan = document.createElement('span');
+  nameSpan.className = 'name';
+  nameSpan.textContent = f.name;
+  chip.appendChild(nameSpan);
+  var rm = document.createElement('button');
+  rm.type = 'button';
+  rm.textContent = 'x';
+  rm.onclick = function(){ clearChip(); };
+  chip.appendChild(rm);
+  chipsDiv.appendChild(chip);
+};
+
+function clearChip() {
+  attached = null;
+  chipsDiv.innerHTML = '';
+  fileInput.value = '';
+}
+window.clearChip = clearChip;
+
+function doSend() {
+  followConversation = true;
+  var text = input.value.trim();
+  if (!text && !attached) return;
+
+  if (attached) {
+    var theFile = attached;
+    var imgUrl = null;
+    if (theFile.type.indexOf('image/') === 0) imgUrl = URL.createObjectURL(theFile);
+    addBubble((text ? text + '\n' : '') + '[anexo: ' + theFile.name + ']', 'user', imgUrl);
+    input.value = ''; input.style.height = 'auto';
+    clearChip();
+    setStatus('Lendo arquivo...');
+
+    var reader = new FileReader();
+    reader.onload = function() {
+      try {
+        var dataUrl = String(reader.result || '');
+        var commaIdx = dataUrl.indexOf(',');
+        var base64 = commaIdx >= 0 ? dataUrl.substring(commaIdx + 1) : '';
+        if (!base64) {
+          addBubble('Nao consegui ler o arquivo.', 'sys');
+          setStatus('');
+          return;
+        }
+        setStatus('Enviando anexo...');
+        fetch('/anexo', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            texto: text,
+            fname: theFile.name,
+            mime: theFile.type || '',
+            data: base64
+          })
+        })
+          .then(function(res) {
+            if (!res.ok) {
+              return res.json().catch(function() { return {}; }).then(function(j) {
+                throw new Error(j.error || ('HTTP ' + res.status));
+              });
+            }
+            return res.json();
+          })
+          .then(function(j) {
+            if (j.route) setRoute(j.route);
+            setStatus('');
+          })
+          .catch(function(err) {
+            addBubble('Nao consegui enviar o anexo: ' + err.message, 'sys');
+            setStatus('');
+          });
+      } catch (e) {
+        addBubble('Erro ao preparar o anexo: ' + e.message, 'sys');
+        setStatus('');
+      }
+    };
+    reader.onerror = function() {
+      addBubble('Nao consegui ler o arquivo.', 'sys');
+      setStatus('');
+    };
+    reader.readAsDataURL(theFile);
+    return;
+  }
+
+  addBubble(text, 'user');
+  input.value = ''; input.style.height = 'auto';
+  fetch('/api/msg', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ texto: text })
+  })
+    .then(function(res) {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    })
+    .then(function(j) {
+      if (j.route) setRoute(j.route);
+    })
+    .catch(function() {
+      addBubble('Nao consegui enviar a mensagem. Confira se a Dida continua aberta.', 'sys');
+    });
+}
+send.onclick = doSend;
+input.addEventListener('keydown', function(e){
+  if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) {
+    e.preventDefault();
+    doSend();
+  }
+});
+
+var canvas = document.getElementById('ball');
+var ctx = canvas.getContext('2d');
+var angle = 0, lastDraw = 0;
+var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+function drawBall(now) {
+  now = now || 0;
+  if (now !== 0 && now - lastDraw < (reduceMotion.matches ? 250 : 33)) {
+    requestAnimationFrame(drawBall);
+    return;
+  }
+  lastDraw = now;
+  var t = now / 1000;
+  var w = canvas.width, h = canvas.height, cx = w / 2, cy = h / 2;
+  ctx.clearRect(0, 0, w, h);
+  var level = Math.max(levels.user, levels.bot);
+  var active = speaking.user || speaking.bot;
+  var pulse = reduceMotion.matches ? 0 : (active ? (level * 22 + Math.sin(t * 2.2) * 6) : (level * 8 + Math.sin(t * 1.2) * 3));
+  var base = 245 + pulse;
+  var hue = reduceMotion.matches ? 272 : (t * 28 + (speaking.user ? 182 : 272)) % 360;
+  angle += reduceMotion.matches ? 0.002 : (active ? 0.035 : 0.012);
+  ctx.beginPath();
+  for (var i = 0; i < 128; i++) {
+    var a = i / 128 * 2 * Math.PI;
+    var r = base + Math.sin(a * 3 + angle) * pulse + Math.sin(a * 5 - angle * 0.45) * (active ? 12 : 6);
+    var x = cx + r * Math.cos(a), y = cy + r * Math.sin(a);
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.closePath();
+  var grad = ctx.createRadialGradient(cx - base * 0.25, cy - base * 0.3, base * 0.08, cx, cy, base * 1.25);
+  grad.addColorStop(0, 'hsla(' + hue + ',100%,88%,.96)');
+  grad.addColorStop(0.38, 'hsla(' + ((hue + 70) % 360) + ',100%,64%,.9)');
+  grad.addColorStop(0.72, 'hsla(' + ((hue + 150) % 360) + ',100%,52%,.62)');
+  grad.addColorStop(1, 'hsla(' + ((hue + 230) % 360) + ',100%,42%,.18)');
+  ctx.fillStyle = grad;
+  ctx.shadowColor = 'hsla(' + ((hue + 35) % 360) + ',100%,62%,.8)';
+  ctx.shadowBlur = 42 + level * 30;
+  ctx.fill();
+  ctx.shadowBlur = 0;
+  requestAnimationFrame(drawBall);
+}
+drawBall();
+
+var ev = new EventSource('/api/events');
+ev.onmessage = function(e){
+  try {
+    var d = JSON.parse(e.data);
+    if (d.type === 'level') { levels = d.levels; speaking = d.speaking; }
+    else if (d.type === 'bot_start') { liveBot = null; stopButton.disabled = false; startBot(); }
+    else if (d.type === 'bot_delta') { appendBot(d.text); }
+    else if (d.type === 'bot') { if (liveBot) { liveBot.textContent = d.text; } else { addBubble(d.text, 'bot'); } liveBot = null; stopButton.disabled = true; setStatus(''); fetch('/api/mem').then(function(r){return r.json();}).then(updateMemoryLabel).catch(function(){}); }
+    else if (d.type === 'user') { addBubble(d.text, 'user'); }
+    else if (d.type === 'status') { setStatus(d.text); }
+    else if (d.type === 'sys') { addBubble(d.text, 'sys'); }
+    else if (d.type === 'report') { showReport(d); }
+    else if (d.type === 'files_search') { openFiles(); filesJob=d.id; filesResults.replaceChildren(); filesShown=0; document.getElementById('filesQuery').value=d.query; pollFiles(); }
+    else if (d.type === 'stopped') { if(liveBot && !liveBot.textContent) liveBot.remove(); liveBot = null; stopButton.disabled = true; setStatus('Resposta interrompida.'); }
+  } catch (err) {}
+};
+ev.onopen = function(){ document.getElementById('connectionText').textContent = 'Pronta para conversar'; };
+ev.onerror = function(){ document.getElementById('connectionText').textContent = 'Reconectando…'; if(liveBot) {liveBot = null; stopButton.disabled = true;} setStatus('Conexão interrompida. Se a resposta ficar incompleta, envie a mensagem novamente.'); };
+
+input.addEventListener('input', function(){ input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight,150) + 'px'; });
+document.querySelectorAll('.suggestion').forEach(function(button){ button.addEventListener('click',function(){ if(button.dataset.attach){ fileInput.click(); return; } input.value=button.dataset.prompt; input.dispatchEvent(new Event('input')); input.focus(); }); });
+var themeToggle = document.getElementById('themeToggle');
+function applyTheme(theme){ document.documentElement.dataset.theme = theme; themeToggle.setAttribute('aria-pressed',String(theme === 'light')); }
+try { applyTheme(localStorage.getItem('dida-theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')); } catch(error) { applyTheme('dark'); }
+themeToggle.onclick=function(){ var theme=document.documentElement.dataset.theme === 'light' ? 'dark' : 'light'; applyTheme(theme); try{localStorage.setItem('dida-theme',theme);}catch(error){} };
+function memoryRequest(path, body) { return fetch(path,{method:'POST',headers:{'Content-Type':'application/json','X-Dida-CSRF':memoryCsrf},body:JSON.stringify(body)}).then(function(response){return response.json().then(function(data){if(!response.ok)throw new Error(data.error || 'Não consegui salvar');return data;});}); }
+stopButton.onclick=function(){ memoryRequest('/api/stop',{}).then(function(){stopButton.disabled=true;}).catch(function(error){setStatus(error.message);}); };
+var memoryDialog=document.getElementById('memoryDialog');
+var memoryEnabled=document.getElementById('memoryEnabled');
+var memoryFeedback=document.getElementById('memoryFeedback');
+function loadMemory(){
+  memoryFeedback.textContent='Carregando…';
+  return fetch('/api/mem/history').then(function(response){if(!response.ok)throw new Error('Não consegui carregar o histórico.');return response.json();}).then(function(data){
+    memoryCsrf=data.csrf;memoryEnabled.checked=data.enabled;updateMemoryLabel(data);
+    var list=document.getElementById('memoryList');list.replaceChildren();
+    data.conversations.slice().reverse().forEach(function(item){var article=document.createElement('article');var time=document.createElement('time');time.textContent=new Date(item.ts*1000).toLocaleString('pt-BR');article.appendChild(time);var user=document.createElement('p');user.textContent='Você: '+item.user;var bot=document.createElement('p');bot.textContent='Dida: '+item.bot;article.appendChild(user);article.appendChild(bot);list.appendChild(article);});
+    memoryFeedback.textContent=data.count ? data.count + ' conversas salvas. Mostrando as 50 mais recentes.' : 'Seu histórico está vazio.';
+  }).catch(function(error){memoryFeedback.textContent=error.message;});
+}
+document.getElementById('memoryOpen').onclick=function(){memoryDialog.showModal();document.getElementById('memoryConfirm').hidden=true;loadMemory();};
+document.getElementById('memoryClose').onclick=function(){memoryDialog.close();};
+memoryEnabled.onchange=function(){var value=memoryEnabled.checked;memoryEnabled.disabled=true;memoryRequest('/api/mem/settings',{enabled:value}).then(function(data){updateMemoryLabel(data);memoryFeedback.textContent=value?'Memória ativada.':'Memória desativada. Seu histórico foi mantido.';}).catch(function(error){memoryEnabled.checked=!value;memoryFeedback.textContent=error.message;}).finally(function(){memoryEnabled.disabled=false;});};
+document.getElementById('memoryClear').onclick=function(){document.getElementById('memoryConfirm').hidden=false;document.getElementById('memoryKeep').focus();};
+document.getElementById('memoryKeep').onclick=function(){document.getElementById('memoryConfirm').hidden=true;};
+document.getElementById('memoryDelete').onclick=function(){var button=this;button.disabled=true;memoryRequest('/api/mem/clear',{}).then(function(){document.getElementById('memoryConfirm').hidden=true;loadMemory();}).catch(function(error){memoryFeedback.textContent=error.message;}).finally(function(){button.disabled=false;});};
+
+</script>
+</body>
+</html>

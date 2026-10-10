@@ -1,0 +1,12 @@
+# Opcionais: instalar apenas no computador que usará voz, microfone e janela.
+-r requirements.txt
+gTTS>=2.5,<3
+edge-tts>=7,<8
+pygame>=2.6,<3
+sounddevice>=0.5,<1
+soundfile>=0.13,<1
+webrtcvad-wheels>=2.0.14,<3
+pyttsx3>=2.99,<3
+pywebview>=6,<7
+PyMuPDF>=1.26,<2
+faster-whisper>=1.2,<2
