@@ -1,0 +1,16 @@
+[Unit]
+Description=Dida v4 Ultimate - Assistente de Voz
+After=network-online.target pipewire.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/rubens/Documents/Codex/2026-10-02/realtime-voice-chat/Dida
+ExecStart=/home/rubens/ia-venv/bin/python /home/rubens/Documents/Codex/2026-10-02/realtime-voice-chat/Dida/ia_completa_hibrida.py
+Restart=on-failure
+RestartSec=5
+Environment=PYTHONUNBUFFERED=1
+
+# Carrega .env automaticamente via código Python (load_dotenv já faz)
+[Install]
+WantedBy=default.target

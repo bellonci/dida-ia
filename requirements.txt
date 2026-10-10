@@ -1,0 +1,17 @@
+sounddevice
+soundfile
+webrtcvad-wheels
+pydub
+noisereduce
+pypdf
+python-docx
+openpyxl
+pandas
+edge-tts
+pygame
+SpeechRecognition
+requests
+numpy
+faster-whisper
+pymupdf
+python-dotenv

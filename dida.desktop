@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Dida 5.4 Ultimate
+Comment=Assistente de voz com Groq, visão e memória
+Exec=/home/rubens/iniciar_dida.sh
+Icon=audio-x-generic
+Terminal=true
+Type=Application
+Categories=Utility;AudioVideo;
+StartupNotify=false
+Path=/home/rubens/Documents/Codex/2026-10-02/realtime-voice-chat/Dida

@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+PROJ="$HOME/Documents/Codex/2026-10-02/realtime-voice-chat/Dida"
+VENV="$HOME/ia-venv/bin/python"
+cd "$PROJ"
+if [ -f ".env" ]; then export $(grep -v '^#' .env | xargs); fi
+if [ ! -f "$VENV" ]; then echo "venv não encontrado $VENV"; exit 1; fi
+$VENV -c "import sounddevice" 2>/dev/null || { echo "[INSTALANDO deps v4...]"; $VENV -m pip install -r requirements.txt; }
+echo "=== Dida 5.0 Ultimate ==="
+echo "Memória: $(cat ~/.config/Dida/memory.json 2>/dev/null | grep -o 'user' | wc -l) conversas"
+echo "Groq: ${GROQ_API_KEY:+ON} ${GROQ_API_KEY:-OFF} Whisper=${GROQ_WHISPER_MODEL}"
+echo "Visão: Groq=${GROQ_VISION_MODEL}"
+exec $VENV ia_completa_hibrida.py --janela "$@"
